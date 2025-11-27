@@ -5,7 +5,7 @@ import AddButton from "../components/AddButton";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
-const Info = () => {
+const Info = ({ sendIngredientList }) => {
   // logic
   const history = useNavigate();
 
@@ -28,6 +28,13 @@ const Info = () => {
     //console.log("재료 추가하기");
   };
 
+  const handleInputChange = (selectedItem) => {
+    const updatedIngridientList = ingredientList.map((item) =>
+      item.id === selectedItem.id ? selectedItem : item
+    );
+    setIngredientList(updatedIngridientList);
+  };
+
   const handleRemove = (selectedId) => {
     console.log("🚀 ~ handleRemove ~ selectedId:", selectedId);
     const filterIngredientList = ingredientList.filter(
@@ -36,6 +43,8 @@ const Info = () => {
     setIngredientList(filterIngredientList);
   };
   const handleNext = () => {
+    //부모에게 데이터 전송
+    sendIngredientList(ingredientList);
     //console.log("chat페이지로 이동");
     // 미션 : chat페이지로 이동 구현
     history("/chat");
@@ -67,6 +76,7 @@ const Info = () => {
                   key={item.id}
                   content={item}
                   onRemove={handleRemove}
+                  onChange={handleInputChange}
                 />
               ))}
             </div>
